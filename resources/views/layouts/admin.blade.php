@@ -29,6 +29,9 @@
   <link href="assets/css/main.css" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  
+  <!-- dataTables -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
 
   <!-- =======================================================
@@ -38,18 +41,65 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <style>
+    /* ====== Sidebar base ====== */
+    #sidebar {
+      position: fixed; inset: 0 auto 0 0;
+      width: 250px; height: 100vh;
+      background: #F0FFF0; color:#14532d;
+      overflow-y:auto; transition: width .25s ease, margin-left .25s ease;
+      z-index: 1050;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.04) inset;
+    }
+    /* mini mode (desktop) */
+    #sidebar.mini { width: 72px; }
+    #sidebar .brand { height:56px }
+    #sidebar .brand .brand-text { transition: opacity .2s ease }
+    #sidebar.mini .brand .brand-text { opacity:0; pointer-events:none; width:0 }
+    #sidebar .nav-link { display:flex; align-items:center; gap:.75rem; padding:.6rem .9rem; border-radius:.5rem; }
+    #sidebar.mini .nav-link { justify-content:center; gap:0; }
+    #sidebar .nav-link .label { transition:opacity .2s ease, width .2s }
+    #sidebar.mini .nav-link .label { opacity:0; width:0; overflow:hidden }
+
+    /* content margin depends on sidebar width */
+    #content { margin-left:250px; transition: margin-left .25s ease; }
+    #content.mini { margin-left:72px; }
+
+    /* ====== Overlay (mobile) ====== */
+    #sidebarOverlay {
+      position: fixed; inset:0;
+      background: rgba(0,0,0,.45);
+      z-index:1049; display:none;
+    }
+    #sidebarOverlay.show { display:block; }
+
+    /* mobile: sidebar ซ่อนเป็น off-canvas */
+    @media (max-width: 768px) {
+      #sidebar { margin-left:-250px; }
+      #sidebar.show { margin-left:0; }
+      #content, #content.mini { margin-left:0; }
+    }
+  </style>
    @stack('styles')
 </head>
 
 <body class="index-page">
-  @include('partials.topbar')
+  
+  {{-- Overlay --}}
+  <div id="sidebarOverlay"></div>
 
-  <main class="main">
-    <h1 class="h4 mb-4">@yield('page-title')</h1>
-    @yield('content')
-  </main>
- @include('partials.footer')
+  {{-- Sidebar --}}
+  @include('partials.admin_sidebar')
 
+
+  {{-- Content --}}
+  <div id="content">
+    
+    @include('partials.admin_topbar')
+    <main class="p-4">
+      @yield('content')
+    </main>
+  </div>
  {{-- Login Modal --}}
   @guest
   <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
@@ -105,8 +155,14 @@
   <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
 
+  <!-- dataTables -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script>
     // --- helper: CSRF token ---
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -179,6 +235,41 @@
         }
       });
     }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar   = document.getElementById('sidebar');
+      const overlay   = document.getElementById('sidebarOverlay');
+      const content   = document.getElementById('content');
+      const btnInside = document.getElementById('btnSidebarMini'); // ปุ่มใน sidebar
+
+      function isMobile(){ return window.innerWidth <= 768; }
+
+      // ปุ่มแฮมเบอร์เกอร์ "ภายใน sidebar"
+      btnInside.addEventListener('click', () => {
+        if (isMobile()) {            // mobile => ใช้ overlay / slide
+          sidebar.classList.toggle('show');
+          overlay.classList.toggle('show');
+        } else {                     // desktop => ย่อเหลือไอคอน
+          sidebar.classList.toggle('mini');
+          content.classList.toggle('mini');
+        }
+      });
+
+      // คลิ๊ก overlay เพื่อปิด (mobile)
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+        overlay.classList.remove('show');
+      });
+
+      // ถ้าจอหด/ขยาย: เคลียร์ state ให้เหมาะ
+      window.addEventListener('resize', () => {
+        if (!isMobile()) {
+          overlay.classList.remove('show');
+          sidebar.classList.remove('show');
+        }
+      });
+    });
   </script>
   @stack('scripts')
 

@@ -26,50 +26,56 @@
             <ul class="navbar-nav ml-auto">
               <!-- Authentication Links -->
               @guest
-              <li class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
-              </li>
-              @if (Route::has('register'))
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-              </li>
-              @endif
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+                </li>
+                @if (Route::has('register'))
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                  </li>
+                @endif
               @else
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
-                  href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <span class="fw-semibold">{{ Auth::user()->name }}</span>
-                  <span class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
-                    style="width:28px;height:28px;font-size:.85rem;">
-                     <i class="fa-solid fa-cart-shopping"></i> 
-                  </span>
-                </a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+                    href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="fw-semibold">{{ Auth::user()->name }}</span>
+                    <span class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
+                      style="width:28px;height:28px;font-size:.85rem;">
+                       <i class="fa-solid fa-cart-shopping"></i> 
+                    </span>
+                  </a>
 
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 py-2" aria-labelledby="userMenu">
-                  {{-- โปรไฟล์ / ตั้งค่า (ถ้ามี) --}}
-                  {{-- 
+                  <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 py-2" aria-labelledby="userMenu">
+                    {{-- โปรไฟล์ / ตั้งค่า (ถ้ามี) --}}
+                    {{-- 
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('profile.show') }}">
+                           <i class="bi bi-person"></i><span>Profile</span>
+                        </a>
+                      </li>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li> 
+                      --}}
                     <li>
-                      <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('profile.show') }}">
-                         <i class="bi bi-person"></i><span>Profile</span>
+                      <a class="dropdown-item d-flex align-items-center gap-2 text-danger"
+                        href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="bi bi-box-arrow-right"></i><span>Logout</span>
                       </a>
                     </li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li> 
-                    --}}
-                  <li>
-                    <a class="dropdown-item d-flex align-items-center gap-2 text-danger"
-                      href="{{ route('logout') }}"
-                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                      <i class="bi bi-box-arrow-right"></i><span>Logout</span>
-                    </a>
+                  </ul>
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                  </form>
+                </li>
+                @if (Auth::user()->user_type == 'saler')
+                  <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link" href="{{ route('admin_store') }}">Goto Store</a>
                   </li>
-                </ul>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                  @csrf
-                </form>
-              </li>
+                @endif
             @endguest
+                
             </ul>
           </div>
         </nav>
