@@ -23,7 +23,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard','Admin\AdminStoreController@index')->name('admin_dashboard');
-    Route::get('/products','Admin\AdminStoreController@products')->name('admin_products');
-    Route::get('/orders','Admin\AdminStoreController@orders')->name('admin_orders');
-    Route::get('/report','Admin\AdminStoreController@report')->name('admin_report');
+
+    Route::group(['prefix' => 'Category'], function () {
+        Route::get('', 'Admin\CategoryController@index')->name('category');
+        // Route::get('/users', 'Admin\CategoryController@store');
+        // Route::get('/settings', 'Admin\CategoryController@update');
+    });
 });

@@ -71,7 +71,7 @@
                 </li>
                 @if (Auth::user()->user_type == 'saler')
                   <li class="nav-item d-flex align-items-center">
-                    <a class="nav-link" href="{{ route('admin_store') }}">Goto Store</a>
+                    <a class="nav-link" href="{{ route('admin_dashboard') }}">Goto Store</a>
                   </li>
                 @endif
             @endguest
