@@ -24,8 +24,7 @@
       </a>
     </li>
     <li>
-      <a href=""
-         class="nav-link">
+      <a href="{{ route('product') }}" class="nav-link {{ request()->routeIs('product') ? 'bg-white shadow-sm' : '' }}">
         <i class="fa-solid fa-box"></i>
         <span class="label">Products</span>
       </a>

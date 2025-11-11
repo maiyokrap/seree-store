@@ -3,28 +3,22 @@
 @endpush
 @section('content')
 
-<div class="panel-body bg-light p-2">
-    <table id="myTable">
-        <thead>
-            <tr>
-                <th>Column 1</th>
-                <th>Column 2</th>
-                <th>Column 3</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Data 1a</td>
-                <td>Data 2a</td>
-                <td>Data 3a</td>
-            </tr>
-            <tr>
-                <td>Data 1b</td>
-                <td>Data 2b</td>
-                <td>Data 3b</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-start">
+                    <h3>{{ __('Dashboard') }}</h3>
+                </div>
+
+                <div class="card-body justify-content-center">
+                    <div class="table-responsive">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 @push('scripts')
